@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Order | ALH DAN MAIGORO</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="container nav-container">
+    <h1>ALH DAN MAIGORO</h1>
+    <nav><a href="products.html">← Continue Shopping</a></nav>
+  </div>
+</header>
+
+<div class="container">
+  <div class="checkout-card">
+    <h2 style="text-align: center; margin-top: 0;">Order Summary</h2>
+    <ul id="items" class="cart-items-list"></ul>
+    
+    <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 700; border-top: 2px solid #eee; padding-top: 15px; margin-top: 15px;">
+      <span>Total:</span>
+      <span id="display-total" style="color: var(--primary);">₦0</span>
+    </div>
+
+    <form action="backend/save_order.php" method="POST" class="order-form" style="margin-top: 30px;">
+      <input type="hidden" name="products" id="products">
+      <input type="hidden" name="total_price" id="total">
+
+      <label>Full Name</label>
+      <input name="customer_name" placeholder="Enter your name" required>
+      
+      <label>WhatsApp Number</label>
+      <input name="phone" placeholder="e.g. 08030000000" required>
+
+      <label>Delivery Option</label>
+      <select name="delivery">
+        <option value="Pickup">Pickup at kaduna</option>
+        <option value="Delivery">Delivery within Kaduna</option>
+        <option value="Logistics">Interstate Logistics</option>
+      </select>
+
+      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 10px;">Place Order via WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let total = 0;
+  let list = document.getElementById("items");
+
+  cart.forEach(item => {
+    total += (item.price * item.qty);
+    let li = document.createElement("li");
+    li.innerHTML = `<span>${item.product} (x${item.qty})</span> <strong>₦${(item.price * item.qty).toLocaleString()}</strong>`;
+    list.appendChild(li);
+  });
+
+  document.getElementById("products").value = JSON.stringify(cart);
+  document.getElementById("total").value = total;
+  document.getElementById("display-total").textContent = "₦" + total.toLocaleString();
+</script>
+
+</body>
+</html>
